@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#050807">
+<title>FORK Admin</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070b09'/%3E%3Cg transform='translate(3.2 3.6) scale(.8)'%3E%3Cg fill='none' stroke='%23a9f628' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 29V16'/%3E%3Cpath d='M16 16c0-5-8-4-8-11'/%3E%3Cpath d='M16 16c0-5 8-4 8-11'/%3E%3Cpath d='M16 16V4'/%3E%3C/g%3E%3Cg fill='%23a9f628'%3E%3Ccircle cx='8' cy='4.6' r='1.7'/%3E%3Ccircle cx='24' cy='4.6' r='1.7'/%3E%3Ccircle cx='16' cy='3.2' r='1.7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<style>
+:root{--bg:#050807;--panel:#0b100e;--panel2:#0f1612;--line:#18221d;--line2:#25322b;--text:#e9f0ea;--muted:#8c9a92;--accent:#a9f628;--ink:#0b1304;--danger:#ff6b6b;color-scheme:dark;
+--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:14px/1.5 var(--font);min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,select,textarea{font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;width:100%}
+textarea{min-height:140px;resize:vertical}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{padding:9px 14px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);font-weight:600;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.p{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.btn.d{color:var(--danger);border-color:rgba(255,107,107,.4)}
+.btn:disabled{opacity:.5;cursor:default}
+.hl{color:var(--accent)}.dim{color:var(--muted)}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:rgba(5,8,7,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;letter-spacing:.08em;font-size:18px}.brand small{font-weight:600;letter-spacing:0;color:var(--muted);margin-left:6px}
+.sp{flex:1}
+main{max-width:980px;margin:0 auto;padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.login{max-width:380px;margin:12vh auto 0;display:grid;gap:12px}
+.login h1{font-size:22px}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tab{padding:8px 14px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+.tab.on{background:rgba(169,246,40,.1);border-color:rgba(169,246,40,.38);color:var(--text)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.bar input{flex:1;min-width:180px}.bar select{width:auto}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px}.stat b{display:block;font-size:20px}
+.list{display:grid;gap:10px}
+.row{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:start}
+.votes{border:1px solid var(--line2);border-radius:10px;text-align:center;padding:6px 0;color:var(--muted)}.votes b{display:block;color:var(--text)}
+.row h3{font-size:15px;margin-bottom:2px;overflow-wrap:anywhere}
+.row p{color:var(--muted);overflow-wrap:anywhere;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--muted)}
+.pill{border:1px solid var(--line2);border-radius:999px;padding:0 8px}
+.acts{display:flex;flex-direction:column;gap:6px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+.note{padding:12px 14px;border-radius:12px;border:1px solid rgba(169,246,40,.38);background:rgba(169,246,40,.08);margin-bottom:12px}
+.note.err{border-color:rgba(255,107,107,.5);background:rgba(255,107,107,.08)}
+.bg{position:fixed;inset:0;background:rgba(0,0,0,.65);display:grid;place-items:center;padding:14px;z-index:20;overflow:auto}
+.modal{background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:18px;width:100%;max-width:560px;display:grid;gap:12px}
+.modal label{display:grid;gap:5px;color:var(--muted);font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--accent);border-radius:12px;padding:10px 16px;z-index:30;max-width:92vw}
+.toast.err{border-color:var(--danger)}
+a{color:var(--accent)}
+@media(max-width:600px){.row{grid-template-columns:44px 1fr}.acts{grid-column:1/-1;flex-direction:row}.two{grid-template-columns:1fr}}
+
+.lock{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand hl">FORK<small>Moderation</small></div><span class="sp"></span>
+  <span class="dim" id="mode"></span>
+  <button class="btn" id="refresh">Refresh</button>
+  <button class="btn p" id="lockbtn">Unlock editing</button>
+</header>
+<main id="app"></main>
+<div id="layer"></div>
+
+<script>
+/* ───────── Config — same project as the website. The anon key is public by design. ───────── */
+var CONFIG = {
+  SUPABASE_URL: "https://ubwzjxbtdzqdnfhuindg.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVid3pqeGJ0ZHpxZG5maHVpbmRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0NjQzODQsImV4cCI6MjEwODA0MDM4NH0.T-Ost9QP1CXdL7qe0Hx-1v5Do7AsyowB4GeF13USElc"
+};
+var TAGS = ['general', 'showcase', 'help', 'ideas', 'news'];
+var BASE = CONFIG.SUPABASE_URL.replace(/\/$/, '');
+var $ = function (s) { return document.querySelector(s); };
+var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+var store = { get: function (k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }, set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }, del: function (k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
+/* the passphrase lives only in this tab's memory/sessionStorage and is sent only to your own Supabase */
+var S = { key: store.get('fork_admin_key'), unlocked: false, posts: [], subs: [], subsErr: '', tab: 'posts', q: '', tag: 'all', sort: 'new' };
+
+function toast(msg, err) { var t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3200); }
+function ago(t) { var s = Math.max(1, (Date.now() - t) / 1000 | 0); return s < 60 ? s + 's ago' : s < 3600 ? (s / 60 | 0) + 'm ago' : s < 86400 ? (s / 3600 | 0) + 'h ago' : (s / 86400 | 0) + 'd ago'; }
+
+/* ───────── Supabase (plain fetch, anon key) ───────── */
+async function call(path, o) {
+  o = o || {};
+  var r = await fetch(BASE + '/rest/v1/' + path, { method: o.method || 'GET', headers: { apikey: CONFIG.SUPABASE_ANON_KEY, Authorization: 'Bearer ' + CONFIG.SUPABASE_ANON_KEY, 'Content-Type': 'application/json' }, body: o.body ? JSON.stringify(o.body) : undefined });
+  var t = await r.text();
+  if (!r.ok) { var e = new Error(t || r.status); e.status = r.status; throw e; }
+  return t ? JSON.parse(t) : null;
+}
+function rpc(name, args) { return call('rpc/' + name, { method: 'POST', body: Object.assign({ p_key: S.key }, args || {}) }); }
+function why(e) {
+  var m = String((e && e.message) || e), st = e && e.status;
+  if (/wrong passphrase/i.test(m)) { lock(); return 'Wrong passphrase.'; }
+  if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'No connection — check your data and retry.';
+  if (st === 404 || /PGRST202|PGRST205|does not exist|schema cache/i.test(m)) return 'Admin setup missing — run supabase/admin.sql first.';
+  if (/not found/i.test(m)) return 'That item no longer exists.';
+  if (/23514|check constraint/i.test(m)) return 'A field is too long or invalid.';
+  return m.length < 140 ? m : 'Something went wrong.';
+}
+
+/* ───────── Lock / unlock ───────── */
+function lock() { S.key = ''; S.unlocked = false; store.del('fork_admin_key'); head(); if (S.posts.length || S.tab) render(); }
+function head() { $('#lockbtn').textContent = S.unlocked ? 'Lock' : 'Unlock editing'; $('#lockbtn').className = 'btn' + (S.unlocked ? '' : ' p'); $('#mode').textContent = S.unlocked ? 'editing unlocked' : 'read-only'; }
+async function tryKey(k) { S.key = k; await rpc('admin_check'); S.unlocked = true; store.set('fork_admin_key', k); head(); await load(); }
+function unlockModal() {
+  modal('<h2>Unlock editing</h2><p class="dim">Enter the passphrase you set in admin.sql.</p><form id="uf" style="display:grid;gap:12px"><input type="password" name="k" placeholder="Passphrase" autocomplete="current-password" required><div class="two"><button class="btn" type="button" id="cx">Cancel</button><button class="btn p" type="submit">Unlock</button></div></form>');
+  $('#cx').onclick = close; $('#uf input').focus();
+  $('#uf').onsubmit = async function (e) { e.preventDefault(); var b = e.target.querySelector('.p'); b.disabled = true; try { await tryKey(e.target.k.value); close(); toast('Unlocked'); } catch (err) { b.disabled = false; S.key = ''; toast(why(err), true); } };
+}
+
+/* ───────── Data + screens ───────── */
+async function load() {
+  if (!S.posts.length) $('#app').innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    S.posts = await call('posts?select=*&order=created_at.desc&limit=1000');
+    S.subs = []; S.subsErr = '';
+    if (S.unlocked) { try { S.subs = await rpc('admin_list_submissions'); } catch (e) { S.subsErr = why(e); } }
+    render();
+  } catch (e) { $('#app').innerHTML = '<div class="note err"><b>Could not load.</b> ' + esc(why(e)) + ' <button class="btn" id="rt" style="margin-left:8px">Retry</button></div>'; var b = $('#rt'); if (b) b.onclick = load; }
+}
+
+function render() {
+  var tot = S.posts.length, votes = S.posts.reduce(function (a, p) { return a + (p.votes || 0); }, 0), day = S.posts.filter(function (p) { return Date.now() - Date.parse(p.created_at) < 864e5; }).length;
+  var h = '<div class="stats"><div class="stat"><b>' + tot + '</b><span class="dim">posts</span></div><div class="stat"><b>' + day + '</b><span class="dim">last 24h</span></div><div class="stat"><b>' + votes + '</b><span class="dim">total votes</span></div>' + (S.unlocked ? '<div class="stat"><b>' + S.subs.length + '</b><span class="dim">tool submissions</span></div>' : '') + '</div>';
+  if (!S.unlocked) h += '<div class="note lock"><span>You are in <b>read-only</b> mode. Unlock with the passphrase to edit or delete posts.</span><button class="btn p" data-unlock>Unlock editing</button></div>';
+  h += '<div class="tabs"><button class="tab' + (S.tab === 'posts' ? ' on' : '') + '" data-tab="posts">Posts</button><button class="tab' + (S.tab === 'subs' ? ' on' : '') + '" data-tab="subs">Tool submissions</button></div>';
+  if (S.tab === 'posts') {
+    h += '<div class="bar"><input id="q" placeholder="Search title, text or author…" value="' + esc(S.q) + '"><select id="tg"><option value="all">All topics</option>' + TAGS.map(function (t) { return '<option' + (S.tag === t ? ' selected' : '') + '>' + t + '</option>'; }).join('') + '</select>' +
+      '<select id="so"><option value="new"' + (S.sort === 'new' ? ' selected' : '') + '>Newest</option><option value="top"' + (S.sort === 'top' ? ' selected' : '') + '>Most votes</option></select>' + (S.unlocked ? '<button class="btn p" id="np">+ New post</button>' : '') + '</div>';
+    var q = S.q.toLowerCase(), list = S.posts.filter(function (p) { return (S.tag === 'all' || p.tag === S.tag) && (!q || (p.title + ' ' + p.body + ' ' + (p.author_name || '')).toLowerCase().indexOf(q) > -1); });
+    list.sort(function (a, b) { return S.sort === 'top' ? (b.votes - a.votes) || (Date.parse(b.created_at) - Date.parse(a.created_at)) : Date.parse(b.created_at) - Date.parse(a.created_at); });
+    h += '<div class="list">' + (list.length ? list.map(function (p) {
+      return '<article class="card row" style="grid-template-columns:54px 1fr' + (S.unlocked ? ' auto' : '') + '"><div class="votes"><b>' + (p.votes || 0) + '</b>votes</div><div><h3>' + esc(p.title) + '</h3><p>' + esc(p.body) + '</p><div class="meta"><span class="pill">' + esc(p.tag) + '</span><span>by ' + esc(p.author_name || 'anonymous') + '</span>' + (p.author_wallet ? '<span title="' + esc(p.author_wallet) + '">wallet ' + esc(p.author_wallet.slice(0, 6) + '…' + p.author_wallet.slice(-4)) + '</span>' : '') + '<span>' + ago(Date.parse(p.created_at)) + '</span></div></div>' +
+        (S.unlocked ? '<div class="acts"><button class="btn" data-edit="' + esc(p.id) + '">Edit</button><button class="btn d" data-del="' + esc(p.id) + '">Delete</button></div>' : '') + '</article>';
+    }).join('') : '<div class="empty">No posts match.</div>') + '</div>';
+  } else if (!S.unlocked) {
+    h += '<div class="empty">Unlock editing to review tool submissions.</div>';
+  } else if (S.subsErr) {
+    h += '<div class="note err">' + esc(S.subsErr) + '</div>';
+  } else {
+    h += '<div class="list">' + (S.subs.length ? S.subs.map(function (s) {
+      return '<article class="card row" style="grid-template-columns:1fr auto"><div><h3>' + esc(s.name) + ' <span class="dim">· ' + esc(s.category || '') + '</span></h3><p>' + esc(s.description || '') + '</p><div class="meta"><a href="https://github.com/' + esc(s.repo) + '" target="_blank" rel="noopener noreferrer">' + esc(s.repo) + '</a>' + ((s.replaces || []).length ? '<span>replaces ' + esc(s.replaces.join(', ')) + '</span>' : '') + '<span>' + ago(Date.parse(s.created_at)) + '</span></div></div><div class="acts"><button class="btn d" data-delsub="' + esc(s.id) + '">Dismiss</button></div></article>';
+    }).join('') : '<div class="empty">No tool submissions yet.</div>') + '</div>';
+  }
+  $('#app').innerHTML = h;
+}
+
+/* ───────── Modals ───────── */
+function modal(html) { var l = $('#layer'); l.innerHTML = '<div class="bg"><div class="modal" role="dialog" aria-modal="true">' + html + '</div></div>'; l.querySelector('.bg').addEventListener('mousedown', function (e) { if (e.target.classList.contains('bg')) close(); }); return l; }
+function close() { $('#layer').innerHTML = ''; }
+function postModal(p) {
+  var isNew = !p; p = p || { title: '', body: '', tag: 'general', author_name: 'FORK' };
+  modal('<h2>' + (isNew ? 'New post' : 'Edit post') + '</h2><form id="pf" style="display:grid;gap:12px"><label>Title<input name="title" maxlength="140" required value="' + esc(p.title) + '"></label><label>Message<textarea name="body" maxlength="3000" required>' + esc(p.body) + '</textarea></label>' +
+    '<div class="two"><label>Topic<select name="tag">' + TAGS.map(function (t) { return '<option' + (p.tag === t ? ' selected' : '') + '>' + t + '</option>'; }).join('') + '</select></label><label>Author name<input name="author" maxlength="40" value="' + esc(p.author_name || '') + '"></label></div>' +
+    '<div class="two"><button class="btn" type="button" id="cx">Cancel</button><button class="btn p" type="submit">' + (isNew ? 'Publish' : 'Save changes') + '</button></div></form>');
+  $('#cx').onclick = close;
+  $('#pf').onsubmit = async function (e) {
+    e.preventDefault(); var f = e.target, b = f.querySelector('.p'); b.disabled = true;
+    var a = { p_title: f.title.value.trim(), p_body: f.body.value.trim(), p_tag: f.tag.value, p_author: f.author.value.trim() };
+    try { if (isNew) await rpc('admin_add_post', a); else await rpc('admin_update_post', Object.assign({ p_id: p.id }, a)); close(); toast(isNew ? 'Published' : 'Saved'); load(); }
+    catch (err) { b.disabled = false; toast(why(err), true); }
+  };
+}
+function confirmDel(label, fn) {
+  modal('<h2>Delete?</h2><p class="dim">' + esc(label) + '</p><p class="dim">This cannot be undone.</p><div class="two"><button class="btn" id="cx">Cancel</button><button class="btn d" id="ok">Delete</button></div>');
+  $('#cx').onclick = close;
+  $('#ok').onclick = async function () { this.disabled = true; try { await fn(); close(); toast('Deleted'); load(); } catch (e) { this.disabled = false; toast(why(e), true); } };
+}
+
+/* ───────── Events ───────── */
+document.addEventListener('click', function (e) {
+  var t;
+  if (e.target.closest('[data-unlock]')) return unlockModal();
+  if ((t = e.target.closest('[data-tab]'))) { S.tab = t.dataset.tab; return render(); }
+  if (e.target.closest('#np')) return postModal();
+  if ((t = e.target.closest('[data-edit]'))) return postModal(S.posts.find(function (p) { return String(p.id) === t.dataset.edit; }));
+  if ((t = e.target.closest('[data-del]'))) { var p = S.posts.find(function (x) { return String(x.id) === t.dataset.del; }); return confirmDel('“' + p.title + '”', function () { return rpc('admin_delete_post', { p_id: p.id }); }); }
+  if ((t = e.target.closest('[data-delsub]'))) { var s = S.subs.find(function (x) { return String(x.id) === t.dataset.delsub; }); return confirmDel(s.name + ' (' + s.repo + ')', function () { return rpc('admin_delete_submission', { p_id: s.id }); }); }
+});
+document.addEventListener('input', function (e) { if (e.target.id === 'q') { S.q = e.target.value; var pos = e.target.selectionStart; render(); var q = $('#q'); q.focus(); q.setSelectionRange(pos, pos); } });
+document.addEventListener('change', function (e) { if (e.target.id === 'tg') { S.tag = e.target.value; render(); } if (e.target.id === 'so') { S.sort = e.target.value; render(); } });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+$('#refresh').onclick = load;
+$('#lockbtn').onclick = function () { if (S.unlocked) { lock(); toast('Locked'); } else unlockModal(); };
+head();
+(async function () { if (S.key) { try { await tryKey(S.key); return; } catch (e) { S.key = ''; store.del('fork_admin_key'); } } head(); load(); })();
+</script>
+</body>
+</html>
